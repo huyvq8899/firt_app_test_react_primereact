@@ -1,0 +1,74 @@
+import "./App.css";
+
+import React, { useState } from "react";
+import { InputTextarea } from "primereact/inputtextarea";
+
+import { InputNumber } from "primereact/inputnumber";
+
+function App() {
+  const [value1, setValue1] = useState("");
+  const [value2, setValue2] = useState("");
+  const [value, setValue] = useState(1999);
+  const [value3, setValue3] = useState(2000);
+  const [value4, setValue4] = useState(2001);
+  return (
+    <div className="App">
+      <h5>Input Area Basic</h5>
+      <InputTextarea
+        value={value1}
+        onChange={(e) => setValue1(e.target.value)}
+        row={25}
+        cols={100}
+      />
+      <h4>Input Text Area AutoSize</h4>
+      <InputTextarea
+        value={value2}
+        onChange={(e) => setValue2(e.target.value)}
+        row={25}
+        cols={100}
+        autoResize
+      />
+      <h3> Input Number Basic</h3>
+      <div className="p-fluid p-grid p-formgrid">
+        <div className="p-field p-col-12 p-md-3">
+          <label htmlFor="integeronly">Integer Only</label>
+          <InputNumber
+            className="p-field p-col-12 p-md-3"
+            inputId="integeronly"
+            value={value}
+            onValueChange={(e) => {
+              console.log(e.value);
+              setValue(e.value);
+            }}
+          ></InputNumber>
+          <label htmlFor="withoutgrouping">Withoutgrouping</label>
+          <InputNumber
+            inputId="withoutgrouping"
+            value={value3}
+            onValueChange={(e) => {
+              console.log(e.value);
+              setValue3(e.value);
+            }}
+            mode="decimal"
+            useGrouping={false}
+          ></InputNumber>
+        </div>
+        <div className="p-field p-col-12 p-md-3">
+          <label htmlFor="minmaxfraction">Min-Max Fraction</label>
+          <InputNumber
+            inputId="minmaxfraction"
+            value={value4}
+            onValueChange={(e) => {
+              setValue4(e.value);
+            }}
+            mode="decimal"
+            minFractionDigits={2}
+            maxFractionDigits={5}
+          ></InputNumber>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;

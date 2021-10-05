@@ -1,0 +1,109 @@
+// import logo from './logo.svg';
+import "./App.css";
+import "primeicons/primeicons.css";
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.css";
+import "primeflex/primeflex.css";
+
+import React, { useState, useEffect, useRef } from "react";
+import { Dropdown } from "primereact/dropdown";
+import { Skeleton } from "primereact/skeleton";
+import { Editor } from "primereact/editor";
+import "../src/assets/DropdownDemo.css";
+
+function App() {
+  //// Dropdown
+  const [lazyItems, setLazyItems] = useState([]);
+  const [lazyLoading, setLazyLoading] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  let loadLazyTimeout = useRef(null);
+  //const items = Array.from({length:10000}).map((_,i) => ({label : `Item ##${i}`, value: i}));
+  useEffect(() => {
+    setLazyItems(Array.from({ length: 10000 }));
+    setLazyLoading(false);
+  }, []);
+
+  const onLazyItemChange = (e) => {
+    setSelectedItem(e.value);
+    console.log("Item selected", e.value);
+  };
+
+  const onLazyLoad = (event) => {
+    setLazyLoading(true);
+
+    if (loadLazyTimeout) {
+      clearTimeout(loadLazyTimeout);
+    }
+
+    //imitate delay of a backend call
+    loadLazyTimeout = setTimeout(() => {
+      const { first, last } = event;
+      const _lazyItems = [...lazyItems];
+
+      for (let i = first; i < last; i++) {
+        _lazyItems[i] = { label: `Item #${i}`, value: i };
+      }
+
+      setLazyItems(_lazyItems);
+      setLazyLoading(false);
+    }, Math.random() * 1000 + 250);
+  };
+
+  ////// Editor React + Primereact
+  const [text1, setText1] = useState(
+    "<div> Hello World!</div><div>PrimerReact <b>Editor</b> <div> <br></div></div>"
+  );
+
+  // const renderHeader = () => {
+  //   return (
+  //     <span className="ql-formats">
+  //       <button className="ql-bold" aria-label="Bold"></button>
+  //       <button className="ql-italic" aria-label="Italic"></button>
+  //       <button className="ql-underline" aria-label="Underline"></button>
+  //     </span>
+  //   );
+  // };
+
+  return (
+    <div>
+      <div className="card">
+        <h5>Editor Default</h5>
+        <Editor
+          style={{ height: "320px" }}
+          value={text1}
+          onTextChange={(e) => {
+            setText1(e.htmlValue);
+            console.log('huydz♥♥♥♥♣♣♣♣🥅🏑🏏🏒🏒' , e)
+          }}
+        />
+      </div>
+      <h5 style={{ fontSize: 20 }}>Virtual Scroll (100000 Items) and Lazy</h5>
+      <Dropdown
+        value={selectedItem}
+        options={lazyItems}
+        onChange={onLazyItemChange}
+        virtualScrollerOptions={{
+          lazy: true,
+          onLazyLoad: onLazyLoad,
+          itemSize: 31,
+          showLoader: true,
+          loading: lazyLoading,
+          delay: 250,
+          loadingTemplate: (options) => {
+            return (
+              <div
+                className="p-d-flex p-ai-center p-p-2"
+                style={{ height: "1rem" }}
+              >
+                <Skeleton width={options.even ? "100%" : "50%"} height="1rem" />
+              </div>
+            );
+          },
+        }}
+      ></Dropdown>
+    </div>
+  );
+}
+
+export default App;
